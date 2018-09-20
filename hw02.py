@@ -1,10 +1,9 @@
-#
-
-#1
+# ER 200 Problemset 2, Nick Clarke
+## #1
 drax = {}
-##1a
-###  1C6_H10_O5 + 5 O2 -> 6 CO2 + 5 H2O
-### 2C15_H11_0 + 34.5 O2 -> 30 CO2 + 11 H20
+###1a
+####  1C6_H10_O5 + 5 O2 -> 6 CO2 + 5 H2O
+#### 2C15_H11_0 + 34.5 O2 -> 30 CO2 + 11 H20
 C = {'mass': 12} 
 O = {'mass': 16}
 H = {'mass': 1}
@@ -15,7 +14,6 @@ wood = {'mj/kg': 15.0}
 wood['mass'] = (C['mass'] * 6) + (H['mass'] * 10) + (O['mass'] * 5)
 co2 = {'mass': 44}
 
-## wood = {'mass': 98.15}
 
 ###( 1 mol coal / 207g coal) * (30 co2 / 2 mol coal) * (44g co2 / 1 mol co2) * (1 kg / 1000 g ) * (1000 g / 1 kg)
 coal['kg_co2/kg_coal'] = ( 1 / coal['mass']) * ( 30 / 2 ) * (co2['mass'] / 1 ) * (1000 / 1) * (1 / 1000)
@@ -56,7 +54,7 @@ drax['biomass_tonnes_y'] = 13.8e6
 drax['new_unit'] = {'cap_factor': 80.0}
 drax['biomass_kwh_y_e'] =  drax['biomass_tonnes_y'] * kg_tonnes * wood['mj/kg'] * kwh_mj * drax['biomass_eff']
 
-drax['new_unit']['nameplate_mw'] = ( drax['coal_kwh_y_e'] - drax['biomass_kwh_y_e'] ) * (1 / 8760 ) * (1 / kwh_mwh) / 0.80  # <--- too high?
+drax['new_unit']['nameplate_mw'] = ( drax['coal_kwh_y_e'] - drax['biomass_kwh_y_e'] ) * (1 / 8760 ) * (1 / kwh_mwh) / 0.80
 ## ANSWERS 1200 MW
 
 ##1e
@@ -76,7 +74,7 @@ eee = chp['e_out_mw'] / (qfuel - (qth_mw / a )) ## <-- Seems to be off by factor
 ## ANSWERS 
 
 #4
-##4a
+##4c
 from math import e, log
 countries = { 'us':{'energy_yr_mtoe':{2007:2321, 2017:2235}, 'co2_yr_mtonnes':{2007: 5581, 2017: 5088}}, 
               'br':{'energy_yr_mtoe':{2007:230, 2017:294}, 'co2_yr_mtonnes':{2007: 351, 2017: 467}},
@@ -86,5 +84,16 @@ countries = { 'us':{'energy_yr_mtoe':{2007:2321, 2017:2235}, 'co2_yr_mtonnes':{2
             }
 
 def energy_r(energy_2007, energy_2017):
-    math.log(energy_2017 / energy_2007) / 10
+    return log(energy_2017 / energy_2007) / 10
 
+def find_r(country_list):
+  for key, value in country_list.items():
+    country_list[key]['growth_r'] = energy_r(countries[key]['energy_yr_mtoe'][2007], countries[key]['energy_yr_mtoe'][2017])  
+
+find_r(countries)
+
+##4d
+years = (log(countries['us']['energy_yr_mtoe'][2017] 
+            / countries['in']['energy_yr_mtoe'][2017])
+          / (countries['in']['growth_r'] ) - (countries['us']['growth_r'])
+        )
